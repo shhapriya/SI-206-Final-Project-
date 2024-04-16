@@ -22,7 +22,7 @@ params = {
     "format": "json"
 }
 
-def get_api_data (params):
+def get_api_data ():
     response = requests.get(API_URL, params=params)
     if response.status_code == 200:
         data = response.json()
@@ -30,10 +30,12 @@ def get_api_data (params):
         top_artists = data['artists']['artist']
         for artist in top_artists:
             print(artist['name'])
+        return top_artists
     else:
         print(f"Error {response.status_code}: {response.text}")
+        return []
 
-def set_up_datrabase (db_name):
+def set_up_database (top_artists):
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect('lastfm_data.db')
     cur = conn.cursor()
@@ -41,9 +43,30 @@ def set_up_datrabase (db_name):
                   (id INTEGER PRIMARY KEY, name TEXT, playcount INTEGER)''')
 
 # Insert data into SQLite database
-    # # for artist in top_artists:
-    #     name = artist['name']
-    #     playcount = int(artist['playcount'])  # Assuming 'playcount' is an integer
-    #     cur.execute("INSERT INTO top_artists (name, playcount) VALUES (?, ?)",
-    #                (name, playcount))
-    return cur, conn
+    for artist in top_artists:
+        name = artist['name']
+        playcount = int(artist['playcount'])  # Assuming 'playcount' is an integer
+        cur.execute("INSERT INTO top_artists (name, playcount) VALUES (?, ?)",
+                   (name, playcount))
+    conn.commit ()
+    conn.close ()
+
+
+# do top artists table first
+#then when doing top tracks table, if the artists name exists, create an integer key 
+#check the artist name for eahc track, do a select statement, and see if it exists 
+# if it doesn't exist, then create a number -1 
+
+# SELECT ROWS 
+# top ar
+#do subplots 
+# if both count listeners, compare 
+
+
+def main ():
+ top_artists = get_api_data()
+ if top_artists:
+    set_up_database(top_artists)
+
+if __name__ == '__main__':
+    main()
