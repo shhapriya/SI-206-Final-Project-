@@ -118,19 +118,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-
-if __name__ == "__main__":
-   main()
-
-
-
-
-  
-
-
-
-
 # do top artists table first
 #then when doing top tracks table, if the artists name exists, create an integer key
 #check the artist name for eahc track, do a select statement, and see if it exists
