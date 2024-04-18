@@ -62,41 +62,65 @@ def insert_best_sellers_books(cur, list_name, books_data, date):
     total_items = 0
     for book_info in books_data:
         title = book_info['title']
-        author = ', '.join(book_info['author'])
-        isbn = book_info['primary_isbn13']
+        author = book_info['author']
+        isbn = book_info['isbn']
         try:
-            cur.execute("INSERT OR IGNORE INTO BestSellers (title, author, isbn, list_name, date) VALUES (?, ?, ?, ?, ?)",
-                        (title, author, isbn, list_name, date))
+            cur.execute("INSERT INTO Bestsellers (Date, Year, Month, ISBN) VALUES (?, ?, ?, ?)",
+                        (date, int(date.split('-')[0]), int(date.split('-')[1]), isbn))
             total_items += 1
         except sqlite3.IntegrityError:  # Handle duplicate entries
             pass
     return total_items
 
+
 def main():
     conn, cur = connect_to_database('top_books.db')
     create_table(cur)
-
-    # Fetching the current date for the list
-    import datetime
-    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-
-    API_URL = f'https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json'
-    params = {'api-key': read_api_key('api_key_nytimes.txt')}
-    top_books_data = fetch_top_books(API_URL, params)
-
-    # Check if data is retrieved successfully
-    if 'results' in top_books_data:
+    
+    API_KEY = read_api_key('api_key_nytimes.txt')
+    
+    # List of years you want to fetch data for
+    years = ['2024', '2023', '2022', '2021', '2020']  # Add or remove years as needed
+    
+    for year in years:
+        API_URL = f'https://api.nytimes.com/svc/books/v3/lists/{year}-01-01/hardcover-fiction.json'
+        params = {'api-key': API_KEY}
+        
+        top_books_data = fetch_top_books(API_URL, params)
+        
         list_name = "Hardcover Fiction"
         books_data = top_books_data['results']['books']
         
-        # Inserting data into the table
-        insert_best_sellers_books(cur, list_name, books_data, current_date)
+        insert_count = insert_best_sellers_books(cur, start_date, list_name, books_data)
+
         
-    else:
-        print("Error: Unable to fetch top books data.")
-    
     conn.commit()
     conn.close()
+
+    # conn, cur = connect_to_database('top_books.db')
+    # create_table(cur)
+
+    # Fetching the current date for the list
+    # import datetime
+    # current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+    # API_URL = f'https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json'
+    # params = {'api-key': read_api_key('api_key_nytimes.txt')}
+    # top_books_data = fetch_top_books(API_URL, params)
+
+    # # Check if data is retrieved successfully
+    # if 'results' in top_books_data:
+    #     list_name = "Hardcover Fiction"
+    #     books_data = top_books_data['results']['books']
+        
+    #     # Inserting data into the table
+    #     insert_best_sellers_books(cur, list_name, books_data, current_date)
+        
+    # else:
+    #     print("Error: Unable to fetch top books data.")
+    
+    # conn.commit()
+    # conn.close()
 
 if __name__ == "__main__":
     main()
