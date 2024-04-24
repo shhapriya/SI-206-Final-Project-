@@ -108,7 +108,7 @@ def main():
    API_KEY = read_api_key("api_key_lastfm.txt")
    API_URL = "https://ws.audioscrobbler.com/2.0/"
    method = "chart.getTopTracks"
-   limit = 100  # Number of results per page
+   limit = 50  # Number of results per page
    total_items = existing_count  # Initialize total items counter
    page = 1  # Initialize page number
 
