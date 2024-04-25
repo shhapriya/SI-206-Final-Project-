@@ -61,7 +61,7 @@ def gather_player_data(cur, conn):
 
 def main():
     path = os.path.dirname(os.path.abspath(__file__))
-    conn = sqlite3.connect(path + '/' + 'players.db')
+    conn = sqlite3.connect(path + '/' + 'complete.db')
     cur = conn.cursor()
     
     gather_player_data(cur, conn)

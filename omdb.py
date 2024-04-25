@@ -75,7 +75,7 @@ def get_movie_ratings(title):
 
 # Function to create SQLite database and tables
 def create_database():
-    conn = sqlite3.connect('ratings.db')
+    conn = sqlite3.connect('complete.db')
     cur = conn.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS 'Genres'
                  (genre_id INTEGER PRIMARY KEY AUTOINCREMENT, genre TEXT UNIQUE)''')
@@ -86,7 +86,7 @@ def create_database():
 
 # Function to insert ratings into SQLite database
 def insert_ratings(title, ratings, genres):
-    conn = sqlite3.connect('ratings.db')
+    conn = sqlite3.connect('complete.db')
     cur = conn.cursor()
     if genres is not None:
         first_genre = genres.split(', ')[0]
@@ -107,7 +107,7 @@ def insert_ratings(title, ratings, genres):
 
 # Function to fetch movies with genres from SQLite database
 def get_movies_with_genres():
-    conn = sqlite3.connect('ratings.db')
+    conn = sqlite3.connect('complete.db')
     cur = conn.cursor()
     cur.execute('''SELECT m.title, m.imdb, m.rotten_tomatoes, m.metacritic, g.genre FROM 'Movie Ratings' m JOIN 'Genres' g ON m.genre_id = g.genre_id''')
     rows = cur.fetchall()
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     print(f"Fetched {len(movie_adaptations)} movie titles from OMDb API")
 
     create_database()
-    conn = sqlite3.connect('ratings.db')
+    conn = sqlite3.connect('complete.db')
     cur = conn.cursor()
 
     cur.execute('''SELECT title FROM 'Movie Ratings' ''')

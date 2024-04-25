@@ -58,7 +58,7 @@ def insert_top_artists(cur, artists_data):
     return total_items
 
 def main():
-    conn, cur = connect_to_database('lastfm_data.db')
+    conn, cur = connect_to_database('complete.db')
 
     create_top_artists_table(cur)
 
