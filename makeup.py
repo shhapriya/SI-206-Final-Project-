@@ -1,74 +1,115 @@
+# FOUNDATION PY FILE
+
 import requests
 import sqlite3
+import json
+import os
+import sys
 
-# Function to fetch makeup products from Makeup API
-def fetch_makeup_products(params=None):
-    url = "http://makeup-api.herokuapp.com/api/v1/products.json"
-    response = requests.get(url, params=params)
-    
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Failed to fetch data: {response.status_code}")
-        return None
+
+# Function to fetch foundation products from Makeup API
+def fetch_foundation_products():
+   url = "http://makeup-api.herokuapp.com/api/v1/products.json"
+   params = {'product_type': 'foundation', 'limit': 25}  # Only foundation products, limit to 25
+   response = requests.get(url, params=params)
+  
+   if response.status_code == 200:
+       return response.json()
+   else:
+       print(f"Failed to fetch foundation products: {response.status_code}")
+       return None
+
 
 # Function to create SQLite database and table
 def create_database():
-    conn = sqlite3.connect('makeup.db')
-    cursor = conn.cursor()
-    
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY,
-        brand TEXT,
-        name TEXT,
-        product_type TEXT,
-        price REAL,
-        rating REAL,
-        product_tags TEXT
-    )
-    ''')
-    
-    conn.commit()
-    conn.close()
+   conn = sqlite3.connect('makeup.db')
+   cursor = conn.cursor()
+  
+   cursor.execute('''
+   CREATE TABLE IF NOT EXISTS myfoundation (
+       brand_id INTEGER PRIMARY KEY,
+       brand_name TEXT,
+       name TEXT,
+       price DOUBLE,
+       currency_name TEXT
+   )
+   ''')
+  
+   conn.commit()
+   conn.close()
+
 
 # Function to batch insert data into SQLite database
 def batch_insert_into_database(products):
-    conn = sqlite3.connect('makeup.db')
-    cursor = conn.cursor()
+   conn = sqlite3.connect('makeup.db')
+   cursor = conn.cursor()
 
-    for product in products:
-        cursor.execute('''
-        INSERT INTO products (id, brand, name, product_type, price, rating, product_tags)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            product.get('id', None),
-            product.get('brand', None),
-            product.get('name', None),
-            product.get('product_type', None),
-            product.get('price', None),
-            product.get('rating', None),
-            ','.join(product.get('product_tags', []))
-        ))
-    
-    conn.commit()
-    conn.close()
+
+   for product in products:
+       if product.get('product_type') == 'foundation':  # Check product_type before insertion
+           # Check if product with the same id already exists in the database
+           cursor.execute("SELECT COUNT(*) FROM myfoundation WHERE id = ?", (product.get('id'),))
+           count = cursor.fetchone()[0]
+
+
+           if count == 0:  # Only insert if product with the same id doesn't exist
+               cursor.execute('''
+               INSERT INTO myfoundation (brand_id, brand_name, name, price, currency)
+               VALUES (?, ?, ?, ?, ?)
+               ''', (
+                   product.get('brand_id', None),
+                   product.get('brand_name', None),
+                   product.get('name', None),
+                   product.get('price', None),
+                   product.get('currency', None),
+               ))
+  
+   conn.commit()
+   conn.close()
+
+
+
+
+def main():
+   # Create database and table
+   create_database()
+
+
+   # Count the number of rows currently in the database
+   conn = sqlite3.connect('makeup.db')
+   cursor = conn.cursor()
+   cursor.execute("SELECT COUNT(*) FROM myfoundation")
+   current_row_count = cursor.fetchone()[0]
+   conn.close()
+
+
+   # Determine the remaining rows to reach 100
+   remaining_rows = 100 - current_row_count
+
+
+   # Fetch foundation products
+   foundation_products = fetch_foundation_products()
+
+
+   if foundation_products:
+       # Insert fetched data into database in batches of 25 until reaching 100 rows
+       try:
+           while remaining_rows > 0:
+               batch_size = min(25, remaining_rows)
+               batch_insert_into_database(foundation_products[:batch_size])
+               remaining_rows -= batch_size
+               print(f"{batch_size} rows inserted. {remaining_rows} rows remaining.")
+       except Exception as e:
+           print("Error inserting data:", e)
+   else:
+       print("No foundation data fetched.")
+
 
 if __name__ == "__main__":
-    # Create database and table
-    create_database()
+   main()
 
-    # Define search parameters
-    params = {
-    'limit': 100
-}
 
-    # Fetch makeup products
-    makeup_products = fetch_makeup_products(params=params)
-    
-    if makeup_products:
-        # Insert fetched data into database
-        batch_insert_into_database(makeup_products)
-        print("Data inserted successfully!")
-    else:
-        print("No data fetched.")
+
+
+
+
