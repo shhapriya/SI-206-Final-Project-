@@ -1,10 +1,10 @@
-
 import requests
 import json
 import os
 import sqlite3
 import sys
 
+# DONT USE THIS
 
 
 
@@ -16,7 +16,7 @@ def read_api_key (file):
   except FileNotFoundError:
       print(f"Error: {'api_key.txt'} not found.")
       return None
-  
+
 def connect_to_database(database_name):
   conn = sqlite3.connect(database_name)
   cur = conn.cursor()
@@ -70,10 +70,6 @@ def insert_top_artists(cur, top_artists):
 
 
 
-
-
-
-
 def main():
    # Connect to SQLite database
    conn, cur = connect_to_database('lastfm_data.db')
@@ -92,7 +88,7 @@ def main():
    API_KEY = read_api_key("api_key_lastfm.txt")
    API_URL = "https://ws.audioscrobbler.com/2.0/"
    method = "chart.getTopArtists"
-   limit = 50  # Number of results per page
+   limit = 100  # Number of results per page
    total_items = existing_count  # Initialize total items counter
 
 
@@ -160,14 +156,6 @@ if __name__ == "__main__":
    main()
 
 
-# do top artists table first
-#then when doing top tracks table, if the artists name exists, create an integer key
-#check the artist name for eahc track, do a select statement, and see if it exists
-# if it doesn't exist, then create a number -1
-
-
-
-
 # SELECT ROWS
 # top ar
 #do subplots
@@ -175,3 +163,10 @@ if __name__ == "__main__":
 # put all the information into one database from all files
 # think about what tables we want in database
 # if there is duplicate string data, we need an integer key to share
+
+
+
+# do top artists table first
+#then when doing top tracks table, if the artists name exists, create an integer key
+#check the artist name for eahc track, do a select statement, and see if it exists
+# if it doesn't exist, then create a number -1

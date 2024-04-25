@@ -78,23 +78,25 @@ def main():
     # Determine the remaining rows to reach 100
     remaining_rows = 100 - current_row_count
 
-    # Fetch lipstick products
-    bronzer_products = fetch_bronzer_products()
-
-    if bronzer_products:
-        # Insert fetched data into database in batches of 25 until reaching 100 rows
+    if remaining_rows > 0:
         try:
             while remaining_rows > 0:
-                batch_size = min(25, remaining_rows)
-                batch_insert_into_database(bronzer_products[:batch_size])
-                remaining_rows -= batch_size
-                print(f"{batch_size} rows inserted. {remaining_rows} rows remaining.")
+                # Fetch new batch of bronzer products
+                bronzer_products = fetch_bronzer_products()
+                print("Fetched bronzer products:", bronzer_products)  # Debugging print
+
+                if bronzer_products:
+                    batch_size = min(25, remaining_rows)
+                    batch_insert_into_database(bronzer_products[:batch_size])
+                    remaining_rows -= batch_size
+                    print(f"{batch_size} rows inserted. {remaining_rows} rows remaining.")
+                else:
+                    print("No bronzer data fetched. Exiting...")
+                    break
         except Exception as e:
             print("Error inserting data:", e)
     else:
-        print("No bronzer data fetched.")
+        print("Database already contains 100 rows.")
 
 if __name__ == "__main__":
     main()
-
-
