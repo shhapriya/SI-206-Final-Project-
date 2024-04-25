@@ -35,7 +35,7 @@ def insert_song(cur, conn, name, artist, album, release_year, length, popularity
                    VALUES (?, ?, ?, ?, ?, ?)''', (name, artist, album, release_year, length, popularity))
     conn.commit()
 
-def fetch_and_insert_songs(cur, conn):
+def fetch_and_insert_songs(cur, conn, playlistid):
     results = sp.current_user_saved_tracks()
     for idx, item in enumerate(results['items']):
         track = item['track']
@@ -51,7 +51,7 @@ def main():
    db_path = 'songs.db'
    conn, cur = connect_to_database(db_path)
    create_table(cur)
-   playlistid = 'YOUR_PLAYLIST_ID_HERE'
+   playlistid = '1GwPMCU8GrbSSBYtpA5zLB?si=273bc64e2c004df1'
    fetch_and_insert_songs(cur, conn, playlistid)
    conn.close()
 
