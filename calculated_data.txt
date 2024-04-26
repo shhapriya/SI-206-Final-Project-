@@ -1,0 +1,15 @@
+Average Playcount for Top Tracks: 6615545.24
+Average Playcount for Top Artists: 374801066.36
+
+Average Playcount per Artist:
+Ariana Grande: 9907912.00
+Artemas: 3912378.00
+Djo: 10312041.00
+Frank Ocean: 34094994.00
+Future: 5016323.00
+Hozier: 4514773.00
+Mitski: 25632201.00
+Olivia Rodrigo: 3617801.00
+Sabrina Carpenter: 8031101.50
+TV Girl: 24274541.00
+Taylor Swift: 2003104.57
