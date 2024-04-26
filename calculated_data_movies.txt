@@ -1,0 +1,5 @@
+Average Rating for IMDB: 3.14
+Average Rating for Rotten Tomatoes: 2.44
+Average Rating for Metacritic: 1.90
+ Percent of Ratings Above Two for IMDB: 91.00
+ Percent of Ratings Above Two for Metacritic: 52.00
