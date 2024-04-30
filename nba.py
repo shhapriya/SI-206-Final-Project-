@@ -6,15 +6,17 @@ import sqlite3
 API_KEY = "13021dfb347b4592b5c6f6195b4f00e1"
 
 def gather_player_data(cur, conn):
-    cur.execute('''CREATE TABLE IF NOT EXISTS players (
-                   id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    cur.execute('''CREATE TABLE IF NOT EXISTS players 
+                (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                    name TEXT, 
                    salary INTEGER,
                    weight_id INTEGER,
-                   height_id INTEGER)''')
+                   height_id INTEGER, 
+                   experience INTEGER)''')
     
     url = "http://archive.sportsdata.io/v3/nba/stats/json/players/2023-11-13-15-51.json"
     headers = {"Ocp-Apim-Subscription-Key": API_KEY}
+
     response = requests.get(url, headers=headers)
     
     players_data = json.loads(response.content.decode('utf-8'))
@@ -28,16 +30,15 @@ def gather_player_data(cur, conn):
         if player['BirthCountry'] == "USA":
             name = player["FirstName"] + " " + player["LastName"]
             try:
-                
                 salary = player.get("Salary", 0)  
                 weight = player.get("Weight", 0)
                 height = player.get("Height", 0)
-                college = player.get("College", "")
+                experience =int(player.get("Experience", 0))
                 cur.execute('''INSERT OR IGNORE INTO players (
-               name, salary, weight_id, height_id) 
-               VALUES (?, ?, ?, ?)''', 
-            (name, salary, weight, height))
-
+                     name, salary, weight_id, height_id, experience) 
+                     VALUES (?, ?, ?, ?, ?)''', 
+            (name, salary, weight, height, experience ))
+                #print(players_data)
                 if cur.rowcount > 0:
                     new_players_count += 1
                     print(f"Inserted player: {name}")
