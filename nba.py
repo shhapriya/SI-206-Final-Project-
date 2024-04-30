@@ -12,7 +12,8 @@ def gather_player_data(cur, conn):
                    salary INTEGER,
                    weight_id INTEGER,
                    height_id INTEGER, 
-                   experience INTEGER)''')
+                   experience INTEGER,
+                depthchartorder INTEGER)''')
     
     url = "http://archive.sportsdata.io/v3/nba/stats/json/players/2023-11-13-15-51.json"
     headers = {"Ocp-Apim-Subscription-Key": API_KEY}
@@ -33,12 +34,13 @@ def gather_player_data(cur, conn):
                 salary = player.get("Salary", 0)  
                 weight = player.get("Weight", 0)
                 height = player.get("Height", 0)
+                depthchartorder= player.get("DepthChartOrder", 0)
                 experience =int(player.get("Experience", 0))
                 cur.execute('''INSERT OR IGNORE INTO players (
-                     name, salary, weight_id, height_id, experience) 
-                     VALUES (?, ?, ?, ?, ?)''', 
-            (name, salary, weight, height, experience ))
-                #print(players_data)
+                     name, salary, weight_id, height_id, experience, depthchartorder) 
+                     VALUES (?, ?, ?, ?, ?, ?)''', 
+            (name, salary, weight, height, experience, depthchartorder))
+                # print(players_data)
                 if cur.rowcount > 0:
                     new_players_count += 1
                     print(f"Inserted player: {name}")
