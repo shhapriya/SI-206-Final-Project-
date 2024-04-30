@@ -30,18 +30,6 @@ def get_avg_dco(cur):
     avg_dco = cur.fetchone()[0]
     return avg_dco
 
-def get_corr_exp_dco(cur):
-    cur.execute("SELECT depthchartorder, experience FROM players WHERE depthchartorder IS NOT NULL AND experience IS NOT NULL")
-    data = cur.fetchall()
-
-    depthchartorder = []
-    experience = []
-    for row in data:
-        depthchartorder.append(row[0])
-        experience.append(row[1])
-
-    corr_coef = np.corrcoef(depthchartorder, experience)[0, 1]
-    return corr_coef
 def get_sal_exp_corr(cur):
     cur.execute("SELECT salary, experience FROM players  WHERE experience IS NOT NULL")
     data = cur.fetchall()
@@ -49,6 +37,7 @@ def get_sal_exp_corr(cur):
     salary = []
     experience = []
     for row in data:
+
         salary.append(row[0])
         experience.append(row[1])
 
@@ -68,34 +57,32 @@ def exp_vs_sal(cur):
     regression_line = [slope * x + intercept for x in experience]
     plt.scatter(experience, salary, color='pink', label= 'Data')
     plt.plot(experience, regression_line, color='magenta', label='Regression Line')
-    plt.scatter(avg_experience, np.mean(salary), color='red', label='Average', marker='x', s=100)
     plt.title('Average Experience vs Salary')
     plt.xlabel('Experience')
     plt.ylabel('Salary')
     plt.show()
 
-def salarygraph(cur):
-    cur.execute("SELECT salary, depthchartorder FROM players WHERE salary IS NOT NULL and depthchartorder IS NOT NULL")
+def dco_vs_exp(cur):
+    cur.execute("SELECT depthchartorder, experience FROM players WHERE depthchartorder IS NOT NULL AND experience IS NOT NULL")
     data = cur.fetchall()
-    salaries = []
     dco = []
+    exp = []
     for row in data:
-        salaries.append(row[0])
-        dco.append(row[1])
-
-   
-    plt.figure(figsize=(10, 6))  
-    plt.barh(range(len(salaries)), salaries, color='orange', edgecolor='gray', label='Salary')
-    plt.barh(range(len(salaries)), dco , color='blue', edgecolor='gray', label='Depth Chart Order')
-    plt.title('Salary and Depth Chart Order')
-    plt.xlabel('Value')
-    plt.ylabel('Player')
+        dco.append(row[0])
+        exp.append(row[1])
     
+
+    plt.bar(dco, exp, color='purple')
+    plt.title('Depth Chart Order vs Experience')
+    plt.xlabel('Depth Chart Order')
+    plt.ylabel('Experience')
+ 
+  
     plt.show()
 
-   
 
-   
+  
+
 
 
 def main():
@@ -107,9 +94,16 @@ def main():
     average_experience = get_avg_experience(cur)
     average_depth_chart_order = get_avg_dco(cur)
     correlation_salary_experience = get_sal_exp_corr(cur)
-    correlation_depth_order_experience = get_corr_exp_dco(cur)
+    
+    print("Average Salary: {:.2f}".format(average_salary))
+    print("Average Weight: {:.2f}".format(average_weight))
+    print("Average Height: {:.2f}".format(average_height))
+    print("Average Experience: {:.2f}".format(average_experience))
+    print("Average Depth Chart Order: {:.2f}".format(average_depth_chart_order))
+    print("Correlation between Salary and Experience: {:.2f}".format(correlation_salary_experience))
+    
     exp_vs_sal(cur)
-    salarygraph(cur)
+    dco_vs_exp(cur)
 
 
 

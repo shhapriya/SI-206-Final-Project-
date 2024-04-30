@@ -17,9 +17,7 @@ def gather_player_data(cur, conn):
     
     url = "http://archive.sportsdata.io/v3/nba/stats/json/players/2023-11-13-15-51.json"
     headers = {"Ocp-Apim-Subscription-Key": API_KEY}
-
     response = requests.get(url, headers=headers)
-    
     players_data = json.loads(response.content.decode('utf-8'))
     cur.execute("SELECT COUNT(name) FROM players")
     current_count = cur.fetchone()[0]
@@ -48,7 +46,6 @@ def gather_player_data(cur, conn):
                 # This means the player already exists in the database, so we skip
                 print(f"Skipping existing player: {name}")
                 continue
-    
     conn.commit()
     print(f"Inserted {new_players_count} new players.")
 
