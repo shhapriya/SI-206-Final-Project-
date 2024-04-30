@@ -10,8 +10,8 @@ def gather_player_data(cur, conn):
                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                    name TEXT, 
                    salary INTEGER,
-                   weight_id INTEGER,
-                   height_id INTEGER, 
+                   weight INTEGER,
+                   height INTEGER, 
                    experience INTEGER,
                 depthchartorder INTEGER)''')
     
