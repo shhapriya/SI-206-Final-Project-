@@ -35,7 +35,7 @@ def gather_player_data(cur, conn):
                 depthchartorder= player.get("DepthChartOrder", 0)
                 experience =int(player.get("Experience", 0))
                 cur.execute('''INSERT OR IGNORE INTO players (
-                     name, salary, weight_id, height_id, experience, depthchartorder) 
+                     name, salary, weight, height, experience, depthchartorder) 
                      VALUES (?, ?, ?, ?, ?, ?)''', 
             (name, salary, weight, height, experience, depthchartorder))
                 # print(players_data)

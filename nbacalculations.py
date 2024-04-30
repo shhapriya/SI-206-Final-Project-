@@ -11,12 +11,12 @@ def get_salary_avg(cur):
     return avg
 
 def get_weight_avg(cur):
-    cur.execute("SELECT AVG(weight_id) FROM players")
+    cur.execute("SELECT AVG(weight) FROM players")
     avg_weight = cur.fetchone()[0]
     return avg_weight
 
 def get_height_avg(cur):
-    cur.execute("SELECT AVG(height_id) FROM players")
+    cur.execute("SELECT AVG(height) FROM players")
     avg_height = cur.fetchone()[0]
     return avg_height
 
