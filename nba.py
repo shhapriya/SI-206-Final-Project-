@@ -28,16 +28,15 @@ def gather_player_data(cur, conn):
         if player['BirthCountry'] == "USA":
             name = player["FirstName"] + " " + player["LastName"]
             try:
-                city = player["BirthCity"]
-                state = player["BirthState"]
+                
                 salary = player.get("Salary", 0)  
                 weight = player.get("Weight", 0)
                 height = player.get("Height", 0)
                 college = player.get("College", "")
                 cur.execute('''INSERT OR IGNORE INTO players (
-               name, birthCity, birthState, salary, weight, height, college) 
-               VALUES (?, ?, ?, CAST(? AS INTEGER), ?, ?, ?)''', 
-            (name, city, state, salary, weight, height, college))
+               name, salary, weight_id, height_id) 
+               VALUES (?, ?, ?, ?)''', 
+            (name, salary, weight, height))
 
                 if cur.rowcount > 0:
                     new_players_count += 1
