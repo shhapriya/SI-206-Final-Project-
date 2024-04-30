@@ -75,17 +75,25 @@ def exp_vs_sal(cur):
     plt.show()
 
 def salarygraph(cur):
-    cur.execute("SELECT salary FROM players WHERE salary IS NOT NULL")
+    cur.execute("SELECT salary, depthchartorder FROM players WHERE salary IS NOT NULL and depthchartorder IS NOT NULL")
     data = cur.fetchall()
     salaries = []
+    dco = []
     for row in data:
         salaries.append(row[0])
+        dco.append(row[1])
+
+   
     plt.figure(figsize=(10, 6))  
-    plt.bar(range(len(salaries)), salaries, color='orange', edgecolor='gray')
-    plt.title('Salary Distribution')
-    plt.xlabel('Player')
-    plt.ylabel('Salary')
+    plt.barh(range(len(salaries)), salaries, color='orange', edgecolor='gray', label='Salary')
+    plt.barh(range(len(salaries)), dco , color='blue', edgecolor='gray', label='Depth Chart Order')
+    plt.title('Salary and Depth Chart Order')
+    plt.xlabel('Value')
+    plt.ylabel('Player')
+    
     plt.show()
+
+   
 
    
 
