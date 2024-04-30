@@ -80,32 +80,25 @@ def dco_vs_exp(cur):
   
     plt.show()
 
-
-  
-
-
+def writecalcs(cur):
+    with open('calculatednba.txt', 'w') as file:
+        file.write("Average Salary: {:.2f}\n".format(get_salary_avg(cur)))
+        file.write("Average Weight: {:.2f}\n".format(get_weight_avg(cur)))
+        file.write("Average Height: {:.2f}\n".format(get_height_avg(cur)))
+        file.write("Average Experience: {:.2f}\n".format(get_avg_experience(cur)))
+        file.write("Average Depth Chart Order: {:.2f}\n".format(get_avg_dco(cur)))
+        file.write("Correlation between Salary and Experience: {:.2f}\n".format(get_sal_exp_corr(cur)))
+        file.write("\n")
 
 def main():
     cur = conn.cursor()
     
-    average_salary = get_salary_avg(cur)
-    average_weight = get_weight_avg(cur)
-    average_height = get_height_avg(cur)
-    average_experience = get_avg_experience(cur)
-    average_depth_chart_order = get_avg_dco(cur)
-    correlation_salary_experience = get_sal_exp_corr(cur)
-    
-    print("Average Salary: {:.2f}".format(average_salary))
-    print("Average Weight: {:.2f}".format(average_weight))
-    print("Average Height: {:.2f}".format(average_height))
-    print("Average Experience: {:.2f}".format(average_experience))
-    print("Average Depth Chart Order: {:.2f}".format(average_depth_chart_order))
-    print("Correlation between Salary and Experience: {:.2f}".format(correlation_salary_experience))
+   
     
     exp_vs_sal(cur)
     dco_vs_exp(cur)
 
-
+    writecalcs(cur)
 
     cur.close()
     conn.close()
