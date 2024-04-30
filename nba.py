@@ -5,29 +5,13 @@ import sqlite3
 
 API_KEY = "13021dfb347b4592b5c6f6195b4f00e1"
 
-
 def gather_player_data(cur, conn):
     cur.execute('''CREATE TABLE IF NOT EXISTS players (
                    id INTEGER PRIMARY KEY AUTOINCREMENT, 
                    name TEXT, 
-                   birthCity INTEGER, 
-                   birthState INTEGER, 
                    salary INTEGER,
                    weight_id INTEGER,
-                   height_id INTEGER,
-                   college_id INTEGER)''')
-    
-    cur.execute('''CREATE TABLE IF NOT EXISTS weights (
-                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                   weight INTEGER)''')
-
-    cur.execute('''CREATE TABLE IF NOT EXISTS heights (
-                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                   height INTEGER)''')
-
-    cur.execute('''CREATE TABLE IF NOT EXISTS colleges (
-                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                   college TEXT)''')
+                   height_id INTEGER)''')
     
     url = "http://archive.sportsdata.io/v3/nba/stats/json/players/2023-11-13-15-51.json"
     headers = {"Ocp-Apim-Subscription-Key": API_KEY}
@@ -46,7 +30,7 @@ def gather_player_data(cur, conn):
             try:
                 city = player["BirthCity"]
                 state = player["BirthState"]
-                salary = player.get("Salary", 0)  # default to 0 if salary is not available
+                salary = player.get("Salary", 0)  
                 weight = player.get("Weight", 0)
                 height = player.get("Height", 0)
                 college = player.get("College", "")
