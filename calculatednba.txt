@@ -1,0 +1,7 @@
+Average Salary: 22527831.52
+Average Weight: 219.04
+Average Height: 77.64
+Average Experience: 12.48
+Average Depth Chart Order: 1.52
+Correlation between Salary and Experience: 0.18
+
