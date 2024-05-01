@@ -44,24 +44,18 @@ def insert_top_tracks(cur, tracks_data):
         listeners = int(track['listeners'])
         artist_name = track['artist']['name']
 
-        # Check if the track already exists in the database
+       
         cur.execute('SELECT COUNT(*) FROM top_tracks WHERE Name = ?', (name,))
         if cur.fetchone()[0] > 0:
-            continue  # Skip inserting if the track already exists
+            continue 
 
-        # Insert artist if not exists
-        cur.execute('''
-            INSERT OR IGNORE INTO top_artists (name)
-            VALUES (?)
-        ''', (artist_name,))
-
-        # Fetch artist's id
+       
         cur.execute('SELECT id FROM top_artists WHERE name = ?', (artist_name,))
         artist_id = cur.fetchone()
         if artist_id:
-            artist_id = artist_id[0]  # Directly assign the integer value
+            artist_id = artist_id[0]  
 
-        # Insert track
+       
         try:
             cur.execute('''
                 INSERT INTO top_tracks (Name, Playcount, Listeners, artistID)
@@ -84,16 +78,16 @@ def main():
     API_KEY = read_api_key("api_key_lastfm.txt")
     API_URL = "https://ws.audioscrobbler.com/2.0/"
     method = "chart.getTopTracks"
-    limit = 50  # Number of results per page
-    total_items = existing_count  # Initialize total items counter
-    page = 1  # Initialize page number
+    limit = 50  
+    total_items = existing_count  
+    page = 1  
 
     params = {
         "method": method,
         "api_key": API_KEY,
         "format": "json",
         "limit": limit,
-        "page": page  # Fetch the first page initially
+        "page": page  
     }
 
     response_data = fetch_top_tracks(API_URL, params)
@@ -113,7 +107,7 @@ def main():
             if total_tracks >= existing_count + 25:
                 break
 
-            page += 1  # Increment page for the next batch
+            page += 1  
             params['page'] = page
             response_data = fetch_top_tracks(API_URL, params)
     else:
