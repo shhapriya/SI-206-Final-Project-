@@ -30,19 +30,35 @@ def get_avg_dco(cur):
     avg_dco = cur.fetchone()[0]
     return avg_dco
 
+# def get_sal_exp_corr(cur):
+#     cur.execute("SELECT salary, experience FROM players  WHERE experience IS NOT NULL")
+#     data = cur.fetchall()
+
+#     salary = []
+#     experience = []
+#     for row in data:
+
+#         salary.append(row[0])
+#         experience.append(row[1])
+
+#     corr_coef = np.corrcoef(salary, experience)[0, 1]
+#     return corr_coef
 def get_sal_exp_corr(cur):
-    cur.execute("SELECT salary, experience FROM players  WHERE experience IS NOT NULL")
+    # Retrieve salary and experience data from the database
+    cur.execute("SELECT salary, experience FROM players")
     data = cur.fetchall()
 
-    salary = []
-    experience = []
-    for row in data:
+    # Extract salary and experience values, filtering out rows with None values
+    valid_data = [(row[0], row[1]) for row in data if all(row)]
+    salary, experience = zip(*valid_data)
 
-        salary.append(row[0])
-        experience.append(row[1])
+    # Calculate correlation coefficient if both salary and experience arrays are not empty
+    if salary and experience:
+        corr_coef = np.corrcoef(salary, experience)[0, 1]
+        return corr_coef
+    else:
+        return None  # Return None if either salary or experience arrays are empty
 
-    corr_coef = np.corrcoef(salary, experience)[0, 1]
-    return corr_coef
 
 def exp_vs_sal(cur):
     cur.execute("SELECT experience, salary FROM players WHERE experience IS NOT NULL AND salary IS NOT NULL")
@@ -81,7 +97,7 @@ def dco_vs_exp(cur):
     plt.show()
 
 def writecalcs(cur):
-    with open('calculatednba.txt', 'w') as file:
+    with open('calculated_data.txt', 'a') as file:
         file.write("Average Salary: {:.2f}\n".format(get_salary_avg(cur)))
         file.write("Average Weight: {:.2f}\n".format(get_weight_avg(cur)))
         file.write("Average Height: {:.2f}\n".format(get_height_avg(cur)))

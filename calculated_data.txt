@@ -1,5 +1,5 @@
 Average Playcount for Top Tracks: 11778597.50
-Average Playcount for Top Artists: 252930938.16
+Average Playcount for Top Artists: 252965936.95
 
 Taylor Swift's Top Tracks Playcount Breakdown:
 aUgUSt: 43.55%
@@ -24,3 +24,30 @@ Steve Lacy: Average Playcount - 18451463.00, Average Listeners - 1168677.50
 Lana Del Rey: Average Playcount - 17645752.00, Average Listeners - 1226442.50
 pinkpantheress: Average Playcount - 17137403.00, Average Listeners - 1018206.00
 Britney Spears: Average Playcount - 16920025.00, Average Listeners - 2026928.00
+Average Salary: 17817653.30
+Average Weight: 219.32
+Average Height: 78.13
+Average Experience: 10.34
+Average Depth Chart Order: 1.66
+Correlation between Salary and Experience: 0.22
+
+Average Rating for IMDB: 3.14
+Average Rating for Rotten Tomatoes: 2.44
+Average Rating for Metacritic: 1.90
+ Percent of Ratings Above Two for IMDB: 91.00
+ Percent of Ratings Above Two for Metacritic: 52.00
+Average Rating for IMDB: 3.14
+Average Rating for Rotten Tomatoes: 2.44
+Average Rating for Metacritic: 1.90
+ Percent of Ratings Above Two for IMDB: 91.00
+ Percent of Ratings Above Two for Metacritic: 52.00
+Average Rating for IMDB: 3.14
+Average Rating for Rotten Tomatoes: 2.44
+Average Rating for Metacritic: 1.90
+ Percent of Ratings Above Two for IMDB: 91.00
+ Percent of Ratings Above Two for Metacritic: 52.00
+Average Rating for IMDB: 3.14
+Average Rating for Rotten Tomatoes: 2.44
+Average Rating for Metacritic: 1.90
+ Percent of Ratings Above Two for IMDB: 91.00
+ Percent of Ratings Above Two for Metacritic: 52.00
